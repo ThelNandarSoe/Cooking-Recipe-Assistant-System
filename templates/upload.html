@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag & Drop or Browse: File Upload</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <style>
+        .header {
+            width: 100%;
+            padding: 15px 0;
+            text-align: left;
+            position: fixed;
+            top: 0;
+            left: 0;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            color: black;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 20px;
+        }
+
+        .logo-container img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
+        .logo-container h1 {
+            font-size: 18px;
+            color: black;
+            font-weight: 600;
+            margin-left: 0px;
+        }
+
+        .ctext{
+            text-align: center;
+            font-size: 130%;
+            font-weight: bold;
+            padding: 20px;
+            margin-top: -28%;
+            color: #6e481e;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Lobster, serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: black;
+            margin: 0;
+            background-color: #FFF7C6;
+            background-image: url("{{ url_for('static', filename='upload.jpg') }}"); /* Replace with your image path */
+            background-size: cover; /* Adjusts the image to cover the whole screen */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents image from repeating */
+        }
+
+        .drag-area {
+            position: absolute;
+            top: 58%;
+            left: 50%;
+            width: 350px;
+            height: 250px ;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            background: #FDE896;
+            border: 2px solid #fff370 ;
+            transition: 0.3s ease-in-out;
+            transform: translate(-50%, -50%);
+        }
+
+        .drag-area.active {
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        }
+
+        .drag-area .icon {
+            font-size: 70px;
+            color: #6e481e ;
+        }
+
+        .drag-area header {
+            font-size: 22px;
+            font-weight: 500;
+            color: #6e481e ;
+        }
+
+        .drag-area p {
+            font-size: 18px;
+            font-weight: 500;
+            color:#6e481e ;
+            margin: 8px 0 12px 0;
+        }
+
+        .drag-area button {
+            padding: 8px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            outline: none;
+            background: #FFF7C6;
+            color: #6e481e;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .drag-area button:hover {
+            background: #fff370;
+        }
+        .drag-area button:active {
+            transform: scale(0.95); /* Click effect without shifting */
+        }
+
+        .drag-area img {
+            width: 400px;  /* Set fixed width */
+            height: 280px; /* Set fixed height */
+            object-fit: cover; /* Fill the container while maintaining aspect ratio */
+            border-radius: 12px;
+            border: 2px solid #ffdd57;
+        }
+        .footer {
+            width: 100%;
+            background: #FDE896;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 15px rgba(255, 255, 255, 0.3);
+        }
+        .footer-content p {
+            color: black;
+            font-size: 13px;
+            margin: 5px 0;
+        }
+
+        .footer-content a {
+            color: black;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .footer-content a:hover {
+            color: #ffdd57;
+        }
+
+        #imgButton {
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: inline-block;
+            padding: 5px;
+            transition: transform 0.2s ease, opacity 0.3s ease;
+        }
+
+        .predict-btn {
+    padding: 10px 25px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    background: #FDE896;
+    color:#6e481e;
+    border: 2px solid #ffd739;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 50px auto;
+    position: absolute;
+    top: 520px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: all 0.3s ease-in-out;
+}
+
+.predict-btn:hover {
+    background: #fff370;
+}
+
+.predict-btn:active {
+    transform: translateX(-50%) scale(0.95); /* Click effect */
+}
+
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="logo-container">
+        <img src={{ url_for('static', filename='logo.jpg') }} alt="Company Logo">
+        <h1 class="name">Cooking Recipe Assistant System</h1>
+    </div>
+</header>
+
+<div class="ctext">
+    <p style="font-size:40px" >What’s on Your Plate? Let Us Tell You!</p><br>
+    <pre>      All you need to do is upload an image.
+        We will guide you through the cooking process!</pre>
+</div>
+<form action="/" method="POST" enctype="multipart/form-data">
+    <div class="drag-area">
+        <div class="dragg">
+            <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+            <header>Drag & Drop</header>
+            <p>OR</p>
+            <button type="button" id="uploadButton">Upload Image</button>
+        </div>
+        <input type="file" name="image" accept="image/*" id="fileInput" hidden>
+    </div>
+    <button type="submit" class="predict-btn">Predict</button>
+</form>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <p> MYANMAR INSTITUTE OF INFORMATION TECHNOLOGY</p>
+    </div>
+</footer>
+
+<script>
+    const dropArea = document.querySelector(".drag-area"),
+          dropp = document.querySelector(".dragg"),
+          dragText = dropArea.querySelector("header"),
+          button = dropArea.querySelector("button"),
+          input = dropArea.querySelector("input");
+    let file;
+
+    button.onclick = () => {
+        input.click();
+    };
+
+    input.addEventListener("change", function() {
+        file = this.files[0];
+        dropArea.classList.add("active");
+        showFile();
+    });
+
+    dropArea.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        dropArea.classList.add("active");
+        dragText.textContent = "Release to Upload File";
+    });
+
+    dropArea.addEventListener("dragleave", () => {
+        dropArea.classList.remove("active");
+        dragText.textContent = "Drag & Drop to Upload File";
+    });
+
+    dropArea.addEventListener("drop", (event) => {
+        event.preventDefault();
+        file = event.dataTransfer.files[0];
+        input.files = event.dataTransfer.files;
+        showFile();
+    });
+
+    function showFile() {
+        let fileType = file.type;
+        let validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+        if (validExtensions.includes(fileType)) {
+            let fileReader = new FileReader();
+            fileReader.onload = () => {
+                let fileURL = fileReader.result;
+                let imgTag = `<img src="${fileURL}" alt="image">`;
+                let imgButton = `<button type="button" id="imgButton" onclick="input.click()"><img src="${fileURL}" alt="image" width ="100"></button>`;
+                dropp.innerHTML = imgButton;
+            };
+            fileReader.readAsDataURL(file);
+        } else {
+            alert("This is not an Image File!");
+            dropArea.classList.remove("active");
+            dragText.textContent = "Drag & Drop to Upload File";
+        }
+    }
+</script>
+
+</body>
+</html>

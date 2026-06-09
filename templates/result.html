@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cooking Recipe Assistant System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #FFF7C6;
+      height: 100vh; /* Ensure full viewport height */
+    overflow-y: scroll;
+    background-color: #FFF7C6;
+            background-image: url("{{ url_for('static', filename='result.jpg') }}"); /* Replace with your image path */
+            background-size: cover; /* Adjusts the image to cover the whole screen */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents image from repeating */
+    }
+    *{
+        font-family: Lobster, serif;
+       }
+    .header {
+      width: 100%;
+      padding: 15px 0;
+      text-align: left;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      color: black;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 20px;
+    }
+
+    .logo-container img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-left: 10px;
+    }
+
+    .logo-container h1 {
+      font-size: 18px;
+      color: black;
+      font-weight: 600;
+      margin-left: 0px;
+    }
+
+    .container {
+      width: 90%;
+      margin: auto;
+      padding-top: 70px;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      grid-template-rows: auto auto;
+      gap: 35px;
+      align-items: start;
+    }
+
+    .image-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 250px;
+    }
+
+    .image-box {
+      width: 250px;
+      height: 200px;
+      border: 2px;
+      border-radius: 10px;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-box img {
+     width: 250px;  /* Set fixed width */
+    height: 200px; /* Set fixed height */
+    object-fit: cover; /* Fill the container while maintaining aspect ratio */
+    border-radius: 10px;
+    border: 2px solid #FDE896 ;
+    }
+
+    .recipe-name {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: -10px;
+      color : black;
+    }
+
+    .ingredient, .instruction {
+      width: 100%;
+      background-color: #FDE896;
+      border-radius: 10px;
+      padding: 20px;
+
+    }
+
+    .ingredient {
+      padding-top: -20px;
+      width: 85%;
+      min-height: 200px;
+      height : auto;
+      grid-column: 1;
+      grid-row: 2;
+      margin-top: -50px;
+    }
+
+    .instruction {
+      width: 95%;
+      min-height: 470px;
+      border-radius: 10px;
+      padding: 20px;
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      height :auto;
+      line-height: 1.5;
+    }
+
+    .footer {
+      width: 100%;
+      background: #FDE896;
+      padding: 5px 0;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 -2px 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .footer-content p {
+      color: black;
+      font-size: 13px;
+      margin: 5px 0;
+    }
+
+    .footer-content a {
+      color: black;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .footer-content a:hover {
+      color: #ffdd57;
+    }
+
+  </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo-container">
+            <img src={{ url_for('static', filename='logo.jpg') }} alt="Company Logo">
+            <h1 class="name">Cooking Recipe Assistant System</h1>
+        </div>
+    </header>
+
+    <div class="container">
+      <div class="content">
+        <div class="image-container">
+          <div class="image-box">
+              <img src="{{ image_url }}" alt="Recipe Image">
+          </div>
+          <div class="recipe-name">
+              <h3>{{ recipe.predicted_class }}</h3>
+          </div>
+        </div>
+
+        <div class="ingredient">
+            <h2 style="margin-top: -5px;">Ingredient</h2>
+
+            <ul>
+              {% for ingredient in recipe.ingredients %}
+                <li>{{ ingredient }}</li>
+              {% endfor %}
+            </ul>
+        </div>
+        <div class="instruction">
+          <h2 style="margin-top: -10px;">Instruction</h2>
+          {% for line in recipe.instructions.split('\n') if line.strip() %}
+              {% if ':' in line %}
+                  <p class="instruction-line">
+                      <strong>Step - {{ loop.index }}: {{ line.split(':')[0] }}:</strong> {{ line.split(':', 1)[1] }}
+                  </p>
+              {% else %}
+                  <p class="instruction-line"><strong>Step {{ loop.index }}:</strong> {{ line }}</p>
+              {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+<footer class="footer">
+    <div class="footer-content">
+        <p><i class="fas fa-map-marker-alt"></i> MYANMAR INSTITUTE OF INFORMATION TECHNOLOGY</p>
+    </div>
+</footer>
+
+</body>
+</html>
