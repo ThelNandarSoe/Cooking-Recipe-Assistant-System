@@ -2,13 +2,6 @@
 An innovative, real-time image processing and deep learning application designed to bridge the gap between food enthusiasts and culinary knowledge. The Cooking Recipe Assistant System (CRAS) automatically classifies food dishes from uploaded images and instantly generates their corresponding ingredients list and step-by-step cooking instructions.
 
 
-# Cooking Recipe Assistant System 🍳🤖
-
-
-An innovative, real-time image processing and deep learning application designed to bridge the gap between food enthusiasts and culinary knowledge. The Cooking Recipe Assistant System (CRAS) automatically classifies food dishes from uploaded images and instantly generates their corresponding ingredients list and step-by-step cooking instructions.
-
----
-
 ## 📌 Project Overview
 
 Traditional recipe searching requires typing specific terms, which can be challenging when discovering unfamiliar global or local regional cuisines. This system leverages advanced Computer Vision (CV) and Convolutional Neural Networks (CNN) to make recipe discovery frictionless. 
@@ -71,9 +64,12 @@ Programming Language: Python
 
 Deep Learning Framework: TensorFlow / Keras
 
+
 Neural Network Backbones: ResNet50 Architecture
 
 Web Deployment Server: Flask Web Framework
 
 Data & Image Engineering libraries: OpenCV, NumPy, Pandas
 
+Clone the Repository
+git clone [https://github.com/ThelNandarSoe/Cooking-Recipe-Assistant-System.git]
